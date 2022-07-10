@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Container, Menu, Grid, Icon, Label } from "semantic-ui-react";
 import Link from "next/link";
-import BasicModal from "../../Modal/BasicModal";
+import dynamic from "next/dynamic";
+const BasicModal = dynamic(() => import("../../Modal/BasicModal"), {
+  ssr: false,
+});
 import Auth from "../../Auth";
 
 export default function MenuWeb() {
@@ -23,12 +26,7 @@ export default function MenuWeb() {
           </Grid.Column>
         </Grid>
       </Container>
-      <BasicModal
-        show={showModal}
-        setShow={setShowModal}
-        title={titleModal}
-        size="small"
-      >
+      <BasicModal show={showModal} setShow={setShowModal} title={titleModal}>
         <Auth onCloseModal={onCloseModal} setTitleModal={setTitleModal} />
       </BasicModal>
     </div>

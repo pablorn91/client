@@ -13,13 +13,12 @@ export default function Auth({ onCloseModal, setTitleModal }) {
     setTitleModal("Crear Nuevo Usuario");
     setShowLogin(false);
   };
-  return (
-    <>
-      {showLogin ? (
-        <LoginForm showRegisterForm={showRegisterForm} />
-      ) : (
-        <RegisterForm showLoginForm={showLoginForm} />
-      )}
-    </>
+  return showLogin ? (
+    <LoginForm
+      showRegisterForm={showRegisterForm}
+      onCloseModal={onCloseModal}
+    />
+  ) : (
+    <RegisterForm showLoginForm={showLoginForm} />
   );
 }
