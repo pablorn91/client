@@ -8,7 +8,7 @@ const BasicModal = dynamic(() => import("../../Modal/BasicModal"), {
 import Auth from "../../Auth";
 
 export default function MenuWeb() {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState("Iniciar Sesión");
 
   const onShowModal = () => setShowModal(true);

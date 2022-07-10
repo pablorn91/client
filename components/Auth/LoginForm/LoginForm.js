@@ -3,10 +3,13 @@ import { Form, Button } from "semantic-ui-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import useAuth from "../../../hooks/useAuth";
 import { loginApi } from "../../../api/user";
 
 export default function LoginForm({ showRegisterForm, onCloseModal }) {
   const [loading, setLoading] = useState(false);
+
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues: initialValues(),
@@ -15,7 +18,7 @@ export default function LoginForm({ showRegisterForm, onCloseModal }) {
       setLoading(true);
       const response = await loginApi(formData);
       if (response?.jwt) {
-        console.log(response);
+        login(response.jwt);
         onCloseModal();
       } else {
         toast.error("El email o la contraseña son incorrectos");
