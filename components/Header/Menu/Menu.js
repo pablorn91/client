@@ -6,10 +6,12 @@ const BasicModal = dynamic(() => import("../../Modal/BasicModal"), {
   ssr: false,
 });
 import Auth from "../../Auth";
+import useAuth from "../../../hooks/useAuth";
 
 export default function MenuWeb() {
   const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState("Iniciar Sesión");
+  const { auth, logout } = useAuth();
 
   const onShowModal = () => setShowModal(true);
   const onCloseModal = () => setShowModal(false);
@@ -22,7 +24,11 @@ export default function MenuWeb() {
             <MenuPlataforms />
           </Grid.Column>
           <Grid.Column className="menu__right" width={10}>
-            <MenuOptions onShowModal={onShowModal} />
+            {auth ? (
+              <button onClick={logout}>Cerrar Sesión</button>
+            ) : (
+              <MenuOptions onShowModal={onShowModal} />
+            )}
           </Grid.Column>
         </Grid>
       </Container>
