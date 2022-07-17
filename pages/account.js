@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { Icon } from "semantic-ui-react";
 import BasicLayout from "../layouts/BasicLayout";
 import { getMeApi } from "../api/user";
 import useAuth from "../hooks/useAuth";
 import ChangeNameForm from "../components/Account/ChangeNameForm";
 import ChangeEmailForm from "../components/Account/ChangeEmailForm";
 import ChangePasswordForm from "../components/Account/ChangePasswordForm";
+import BasicModal from "../components/Modal/BasicModal";
+import AddressForm from "../components/Account/AddressForm";
+import ListAddress from "../components/Account/ListAddress";
 
 export default function Account() {
   const [user, setUser] = useState(undefined);
@@ -33,6 +37,8 @@ export default function Account() {
         logout={logout}
         setReloadUser={setReloadUser}
       />
+
+      <Addresses />
     </BasicLayout>
   );
 }
@@ -54,6 +60,43 @@ function Configuration({ user, logout, setReloadUser }) {
         />
         <ChangePasswordForm user={user} logout={logout} />
       </div>
+    </div>
+  );
+}
+
+function Addresses() {
+  const [showModal, setShowModal] = useState(false);
+  const [titleModal, setTitleModal] = useState("");
+  const [formModal, setFormModal] = useState(null);
+  const [reloadAddresses, setReloadAddresses] = useState(false);
+
+  const openModal = (title) => {
+    setTitleModal(title);
+    setFormModal(
+      <AddressForm
+        setShowModal={setShowModal}
+        setReloadAddresses={setReloadAddresses}
+      />
+    );
+    setShowModal(true);
+  };
+
+  return (
+    <div className="account__addresses">
+      <div className="title">
+        Direcciones
+        <Icon name="plus" link onClick={() => openModal("Nueva Dirección")} />
+      </div>
+      <div className="data">
+        <ListAddress
+          reloadAddresses={reloadAddresses}
+          setReloadAddresses={setReloadAddresses}
+        />
+      </div>
+
+      <BasicModal show={showModal} setShow={setShowModal} title={titleModal}>
+        {formModal}
+      </BasicModal>
     </div>
   );
 }
