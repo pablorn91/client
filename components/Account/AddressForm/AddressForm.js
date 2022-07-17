@@ -4,17 +4,22 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
-import { createAddressApi } from "../../../api/address";
+import { createAddressApi, updateAddressApi } from "../../../api/address";
 
-export default function AddressForm({ setShowModal, setReloadAddresses }) {
+export default function AddressForm({
+  setShowModal,
+  setReloadAddresses,
+  newAddress,
+  address,
+}) {
   const [loading, setLoading] = useState(false);
   const { auth, logout } = useAuth();
 
   const formik = useFormik({
-    initialValues: initialValues(),
+    initialValues: initialValues(address),
     validationSchema: Yup.object(validationSchema()),
     onSubmit: (formData) => {
-      createAddress(formData);
+      newAddress ? createAddress(formData) : updateAddress(formData);
     },
   });
 
@@ -35,6 +40,23 @@ export default function AddressForm({ setShowModal, setReloadAddresses }) {
       setShowModal(false);
     }
 
+    setLoading(false);
+  };
+
+  const updateAddress = async (formData) => {
+    setLoading(true);
+    const formDataTemp = {
+      ...formData,
+      user: auth.idUser,
+    };
+    const response = await updateAddressApi(address._id, formDataTemp, logout);
+    if (!response) {
+      toast.warning("Error al actualizar la dirección");
+    } else {
+      formik.resetForm();
+      setReloadAddresses(true);
+      setShowModal(false);
+    }
     setLoading(false);
   };
   return (
@@ -111,7 +133,7 @@ export default function AddressForm({ setShowModal, setReloadAddresses }) {
         </Form.Group>
         <div className="actions">
           <Button className="submit" type="submit" loading={loading}>
-            Crear Dirección
+            {newAddress ? "Crear dirección" : "Actualizar dirección"}
           </Button>
         </div>
       </Form>
@@ -119,15 +141,15 @@ export default function AddressForm({ setShowModal, setReloadAddresses }) {
   );
 }
 
-function initialValues() {
+function initialValues(address) {
   return {
-    title: "",
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    postalCode: "",
-    phone: "",
+    title: address?.title || "",
+    name: address?.name || "",
+    address: address?.address || "",
+    city: address?.city || "",
+    state: address?.state || "",
+    postalCode: address?.postalCode || "",
+    phone: address?.phone || "",
   };
 }
 
