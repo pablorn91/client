@@ -78,7 +78,9 @@ function Info({ game }) {
             {discount ? (
               <>
                 <p>-{discount}%</p>
-                <p>{price - Math.floor(price * discount) / 100}$</p>
+                <p>
+                  {(price - Math.floor(price * discount) / 100).toFixed(2)}$
+                </p>
               </>
             ) : (
               <p>{price}$</p>
