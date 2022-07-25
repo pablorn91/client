@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import jwtDecode from "jwt-decode";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
 import CartContext from "../context/CartContext";
@@ -100,6 +101,9 @@ export default function MyApp({ Component, pageProps }) {
     <AuthContext.Provider value={authData}>
       <CartContext.Provider value={cartData}>
         <Component {...pageProps} />
+        <Head>
+          <link rel="icon" href="/favicon-gaming.ico" />
+        </Head>
         <ToastContainer
           position="top-right"
           autoClose={5000}
